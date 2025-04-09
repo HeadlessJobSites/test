@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gobi Test</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 2rem;
+      background: #f8f8f8;
+    }
+
+    .gobi-wrapper {
+      max-width: 400px;
+      margin: auto;
+      padding: 2rem;
+      background: white;
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="gobi-wrapper">
+    <h2>Gobi Test Collection</h2>
+    <div class="gobi-collection" data-gobi-collection-id="4uapw"></div>
+  </div>
+
+  <script>
+    // Загрузка скрипта вручную
+    window.addEventListener('DOMContentLoaded', function () {
+      const script = document.createElement('script');
+      script.src = 'https://widget.gobistories.com/gwi/6';
+      script.onload = () => {
+        if (window.gobi) gobi.discover();
+        else console.error('Gobi not loaded');
+      };
+      document.body.appendChild(script);
+    });
+  </script>
+
+</body>
+
+</html>
