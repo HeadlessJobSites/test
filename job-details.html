@@ -592,104 +592,91 @@
     <!-- Similar jobs section -->
     <script>
         $(document).ready(function () {
-            let jobs = []; // Array to store all jobs
-            let displayedJobs = 0; // Counter for the number of jobs currently displayed
-            const jobsToShowDesktop = 12; // Number of jobs to show on desktop before "Load More"
-            const jobsToShowMobile = 6; // Number of jobs to show on mobile before "Load More"
+            let jobs = [];
+            let displayedJobs = 0;
+            const jobsToShowDesktop = 12;
+            const jobsToShowMobile = 6;
             let jobsToShow = window.innerWidth > 768 ? jobsToShowDesktop : jobsToShowMobile;
 
-            // Adjust jobsToShow based on window resize
+            // Handle window resize
             $(window).resize(function () {
                 jobsToShow = window.innerWidth > 768 ? jobsToShowDesktop : jobsToShowMobile;
-                displayedJobs = Math.min(jobsToShow, jobs.length); // Adjust displayedJobs based on new jobsToShow
-                displayJobs(); // Redisplay jobs based on new size
-                updateLoadMoreVisibility(); // Update button visibility after resize
+                displayedJobs = Math.min(jobsToShow, jobs.length);
+                displayJobs();
+                updateLoadMoreVisibility(getFilteredJobs().length);
             });
 
-            // Oragnization name for filter (job type)
             function getOrganizationUnitName(job) {
                 return job.organizations?.length > 1
                     ? job.organizations[1]?.nameorgunit
                     : job.organizations?.[0]?.nameorgunit || 'Not specified';
             }
 
-            // Function to populate filter dropdowns based on jobs
+            // 🔍 Фильтрация с учётом выбранных фильтров
+            function getFilteredJobs() {
+                const selectedCountry = $('#locationFilter').val();
+                const selectedJobType = $('#jobTypeFilter').val();
+                return jobs.filter(job => {
+                    const orgName = getOrganizationUnitName(job);
+                    return (selectedCountry === 'All' || job.country === selectedCountry) &&
+                        (selectedJobType === 'All' || orgName === selectedJobType);
+                });
+            }
+
             function populateFilters() {
                 const locationSet = new Set();
                 const jobTypeSet = new Set();
 
                 jobs.forEach(job => {
-                    if (job.country) { // Check if job has a country
-                        locationSet.add(job.country);
-                    }
+                    if (job.country) locationSet.add(job.country);
                     const orgName = getOrganizationUnitName(job);
-                    if (orgName && orgName !== 'Not specified') { // Check if job has a title
-                        jobTypeSet.add(orgName.trim());
-                    }
+                    if (orgName && orgName !== 'Not specified') jobTypeSet.add(orgName.trim());
                 });
 
-
-                // Populate location filter
-                $('#locationFilter').html('<option value="All">All platser</option>');
+                $('#locationFilter').html('<option value="All">Alla platser</option>');
                 locationSet.forEach(country => {
                     $('#locationFilter').append(`<option value="${country}">${country}</option>`);
                 });
 
-                // Populate job type filter
                 $('#jobTypeFilter').html('<option value="All">Alla verksamhetsområden</option>');
                 jobTypeSet.forEach(type => {
                     $('#jobTypeFilter').append(`<option value="${type}">${type}</option>`);
                 });
             }
 
-            // Function to display jobs based on filters
             function displayJobs() {
-                $('#jobList').empty(); // Clear current jobs
+                $('#jobList').empty();
 
-                // Apply filters
-                const selectedCountry = $('#locationFilter').val();
-                const selectedJobType = $('#jobTypeFilter').val();
-                let filteredJobs = jobs.filter(job => {
-                    const orgName = getOrganizationUnitName(job);
-                    return (selectedCountry === 'All' || job.country === selectedCountry) &&
-                        (selectedJobType === 'All' || orgName === selectedJobType);
-                });
-
+                const filteredJobs = getFilteredJobs();
                 const jobsToRender = filteredJobs.slice(0, displayedJobs);
 
-                // Add job cards to the DOM
                 jobsToRender.forEach(job => {
                     $('#jobList').append(buildJobCard(job));
                 });
 
-                updateLoadMoreVisibility(filteredJobs.length); // Update the visibility of the "Load More" button
+                updateLoadMoreVisibility(filteredJobs.length);
             }
 
-            // Function to build HTML for a job card
             function buildJobCard(job) {
-                // Assuming job-details.html is your detail page and it can handle job IDs
-                // Adjust accordingly if your detail page has a different URL structure
                 const jobDetailUrl = `job-details.html?jobId=${job.ad_id}`;
-                // Use the second organization unit if available, otherwise use the first one
-                const organizationUnitName = job.organizations.length > 1 ? job.organizations[1].nameorgunit : job.organizations[0]?.nameorgunit || 'Not specified';
+                const organizationUnitName = getOrganizationUnitName(job);
                 return `
-<div class="col-12 col-md-4 col-lg-4 mb-4">
-    <a href="${jobDetailUrl}" class="" style="text-decoration: none; color: inherit;">
-        <div class="card h-100">
-            <div class="card-body">
-		        <div class="card-category"><span>${organizationUnitName}</span></div>
-                <h5 class="card-title">${job.title}</h5>
-                <p class="card-text">${job.country}</p>
-			    <a href="${jobDetailUrl}" class="stretched-link">
-                <img src="./files/arrow-right-thin.svg" class="stretched-link" alt="Details" style="">
-		</a>
-            </div>
-        </div>
-    </a>
-</div>`;
+              <div class="col-12 col-md-4 col-lg-4 mb-4">
+                <a href="${jobDetailUrl}" class="" style="text-decoration: none; color: inherit;">
+                  <div class="card h-100">
+                    <div class="card-body">
+                      <div class="card-category"><span>${organizationUnitName}</span></div>
+                      <h5 class="card-title">${job.title}</h5>
+                      <p class="card-text">${job.country}</p>
+                      <a href="${jobDetailUrl}" class="stretched-link">
+                        <img src="./files/arrow-right-thin.svg" class="stretched-link" alt="Details">
+                      </a>
+                    </div>
+                  </div>
+                </a>
+              </div>`;
             }
 
-            // Function to update the visibility of the "Load More" button
             function updateLoadMoreVisibility(filteredCount) {
                 if (displayedJobs >= filteredCount) {
                     $('#loadMore').hide();
@@ -697,12 +684,6 @@
                     $('#loadMore').show();
                 }
             }
-
-            // Function to fetch jobs from the API
-            $(document).ready(function () {
-                const currentJobId = new URLSearchParams(window.location.search).get('jobId');
-                fetchJobs(currentJobId); // Pass currentJobId to the fetchJobs function
-            });
 
             function fetchJobs(currentJobId) {
                 fetch('https://api.talentech.io/reachmee/feed/jensen')
@@ -722,31 +703,27 @@
                     });
             }
 
+            // 🔄 При загрузке страницы
+            const currentJobId = new URLSearchParams(window.location.search).get('jobId');
+            fetchJobs(currentJobId);
 
-            // Load jobs when page is ready
-            fetchJobs();
-
-            // Event listener for "Load More" button
             $('#loadMore').click(function () {
-                displayedJobs += jobsToShow; // Increase the number of displayed jobs
-                displayJobs(); // Display new set of jobs
-                // updateLoadMoreVisibility(); // Check if we still need the "Load More" button
+                displayedJobs += jobsToShow;
+                displayJobs();
             });
 
-            // Event listeners for filter dropdowns
-            $('#locationFilter').change(function () {
-                displayedJobs = jobsToShow; // Reset displayed jobs to show initial count based on current device
-                displayJobs(); // Apply filter and display jobs
-                // updateLoadMoreVisibility(); // Update "Load More" button visibility based on filters
+            $('#locationFilter, #jobTypeFilter').change(function () {
+                displayedJobs = jobsToShow;
+                displayJobs();
             });
 
-            $('#jobTypeFilter').change(function () {
-                displayedJobs = jobsToShow; // Reset displayed jobs to show initial count based on current device
-                displayJobs(); // Apply filter and display jobs
-                // updateLoadMoreVisibility(); // Update "Load More" button visibility based on filters
+            // 👇 проверка на скролле
+            $(window).on('scroll', function () {
+                updateLoadMoreVisibility(getFilteredJobs().length);
             });
         });
     </script>
+
 
     <!-- Job page info and description -->
     <script>
