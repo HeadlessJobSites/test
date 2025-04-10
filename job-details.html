@@ -598,29 +598,25 @@
             const jobsToShowMobile = 6;
             let jobsToShow = window.innerWidth > 768 ? jobsToShowDesktop : jobsToShowMobile;
 
-            // Handle window resize
+            const currentJobId = new URLSearchParams(window.location.search).get('jobId');
+
+            // Responsive adjustment
             $(window).resize(function () {
+                const previousJobsToShow = jobsToShow;
                 jobsToShow = window.innerWidth > 768 ? jobsToShowDesktop : jobsToShowMobile;
-                displayedJobs = Math.min(jobsToShow, jobs.length);
+
+                if (displayedJobs <= previousJobsToShow) {
+                    displayedJobs = jobsToShow;
+                }
+
                 displayJobs();
-                updateLoadMoreVisibility(getFilteredJobs().length);
+                updateLoadMoreVisibility();
             });
 
             function getOrganizationUnitName(job) {
                 return job.organizations?.length > 1
                     ? job.organizations[1]?.nameorgunit
                     : job.organizations?.[0]?.nameorgunit || 'Not specified';
-            }
-
-            // 🔍 Фильтрация с учётом выбранных фильтров
-            function getFilteredJobs() {
-                const selectedCountry = $('#locationFilter').val();
-                const selectedJobType = $('#jobTypeFilter').val();
-                return jobs.filter(job => {
-                    const orgName = getOrganizationUnitName(job);
-                    return (selectedCountry === 'All' || job.country === selectedCountry) &&
-                        (selectedJobType === 'All' || orgName === selectedJobType);
-                });
             }
 
             function populateFilters() {
@@ -630,7 +626,9 @@
                 jobs.forEach(job => {
                     if (job.country) locationSet.add(job.country);
                     const orgName = getOrganizationUnitName(job);
-                    if (orgName && orgName !== 'Not specified') jobTypeSet.add(orgName.trim());
+                    if (orgName && orgName !== 'Not specified') {
+                        jobTypeSet.add(orgName.trim());
+                    }
                 });
 
                 $('#locationFilter').html('<option value="All">Alla platser</option>');
@@ -647,7 +645,15 @@
             function displayJobs() {
                 $('#jobList').empty();
 
-                const filteredJobs = getFilteredJobs();
+                const selectedCountry = $('#locationFilter').val();
+                const selectedJobType = $('#jobTypeFilter').val();
+
+                const filteredJobs = jobs.filter(job => {
+                    const orgName = getOrganizationUnitName(job);
+                    return (selectedCountry === 'All' || job.country === selectedCountry) &&
+                        (selectedJobType === 'All' || orgName === selectedJobType);
+                });
+
                 const jobsToRender = filteredJobs.slice(0, displayedJobs);
 
                 jobsToRender.forEach(job => {
@@ -659,13 +665,16 @@
 
             function buildJobCard(job) {
                 const jobDetailUrl = `job-details.html?jobId=${job.ad_id}`;
-                const organizationUnitName = getOrganizationUnitName(job);
+                const orgName = job.organizations.length > 1
+                    ? job.organizations[1].nameorgunit
+                    : job.organizations[0]?.nameorgunit || 'Not specified';
+
                 return `
               <div class="col-12 col-md-4 col-lg-4 mb-4">
-                <a href="${jobDetailUrl}" class="" style="text-decoration: none; color: inherit;">
+                <a href="${jobDetailUrl}" style="text-decoration: none; color: inherit;">
                   <div class="card h-100">
                     <div class="card-body">
-                      <div class="card-category"><span>${organizationUnitName}</span></div>
+                      <div class="card-category"><span>${orgName}</span></div>
                       <h5 class="card-title">${job.title}</h5>
                       <p class="card-text">${job.country}</p>
                       <a href="${jobDetailUrl}" class="stretched-link">
@@ -703,8 +712,6 @@
                     });
             }
 
-            // 🔄 При загрузке страницы
-            const currentJobId = new URLSearchParams(window.location.search).get('jobId');
             fetchJobs(currentJobId);
 
             $('#loadMore').click(function () {
@@ -712,17 +719,19 @@
                 displayJobs();
             });
 
-            $('#locationFilter, #jobTypeFilter').change(function () {
+            $('#locationFilter').change(function () {
                 displayedJobs = jobsToShow;
                 displayJobs();
             });
 
-            // 👇 проверка на скролле
-            $(window).on('scroll', function () {
-                updateLoadMoreVisibility(getFilteredJobs().length);
+            $('#jobTypeFilter').change(function () {
+                displayedJobs = jobsToShow;
+                displayJobs();
             });
         });
     </script>
+
+
 
 
     <!-- Job page info and description -->
