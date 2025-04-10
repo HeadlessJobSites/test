@@ -598,19 +598,15 @@
             const jobsToShowMobile = 6;
             let jobsToShow = window.innerWidth > 768 ? jobsToShowDesktop : jobsToShowMobile;
 
-            const currentJobId = new URLSearchParams(window.location.search).get('jobId');
-
-            // Responsive adjustment
             $(window).resize(function () {
-                const previousJobsToShow = jobsToShow;
+                const prevJobsToShow = jobsToShow;
                 jobsToShow = window.innerWidth > 768 ? jobsToShowDesktop : jobsToShowMobile;
 
-                if (displayedJobs <= previousJobsToShow) {
+                if (displayedJobs <= prevJobsToShow) {
                     displayedJobs = jobsToShow;
                 }
 
                 displayJobs();
-                updateLoadMoreVisibility();
             });
 
             function getOrganizationUnitName(job) {
@@ -626,9 +622,7 @@
                 jobs.forEach(job => {
                     if (job.country) locationSet.add(job.country);
                     const orgName = getOrganizationUnitName(job);
-                    if (orgName && orgName !== 'Not specified') {
-                        jobTypeSet.add(orgName.trim());
-                    }
+                    if (orgName && orgName !== 'Not specified') jobTypeSet.add(orgName.trim());
                 });
 
                 $('#locationFilter').html('<option value="All">Alla platser</option>');
@@ -655,7 +649,6 @@
                 });
 
                 const jobsToRender = filteredJobs.slice(0, displayedJobs);
-
                 jobsToRender.forEach(job => {
                     $('#jobList').append(buildJobCard(job));
                 });
@@ -665,25 +658,25 @@
 
             function buildJobCard(job) {
                 const jobDetailUrl = `job-details.html?jobId=${job.ad_id}`;
-                const orgName = job.organizations.length > 1
+                const organizationUnitName = job.organizations.length > 1
                     ? job.organizations[1].nameorgunit
                     : job.organizations[0]?.nameorgunit || 'Not specified';
 
                 return `
-              <div class="col-12 col-md-4 col-lg-4 mb-4">
-                <a href="${jobDetailUrl}" style="text-decoration: none; color: inherit;">
-                  <div class="card h-100">
-                    <div class="card-body">
-                      <div class="card-category"><span>${orgName}</span></div>
-                      <h5 class="card-title">${job.title}</h5>
-                      <p class="card-text">${job.country}</p>
-                      <a href="${jobDetailUrl}" class="stretched-link">
-                        <img src="./files/arrow-right-thin.svg" class="stretched-link" alt="Details">
-                      </a>
-                    </div>
-                  </div>
-                </a>
-              </div>`;
+      <div class="col-12 col-md-4 col-lg-4 mb-4">
+        <a href="${jobDetailUrl}" style="text-decoration: none; color: inherit;">
+          <div class="card h-100">
+            <div class="card-body">
+              <div class="card-category"><span>${organizationUnitName}</span></div>
+              <h5 class="card-title">${job.title}</h5>
+              <p class="card-text">${job.country}</p>
+              <a href="${jobDetailUrl}" class="stretched-link">
+                <img src="./files/arrow-right-thin.svg" class="stretched-link" alt="Details">
+              </a>
+            </div>
+          </div>
+        </a>
+      </div>`;
             }
 
             function updateLoadMoreVisibility(filteredCount) {
@@ -712,13 +705,17 @@
                     });
             }
 
+            // Get current job ID from URL and fetch jobs
+            const currentJobId = new URLSearchParams(window.location.search).get('jobId');
             fetchJobs(currentJobId);
 
+            // Load more button
             $('#loadMore').click(function () {
                 displayedJobs += jobsToShow;
                 displayJobs();
             });
 
+            // Filters
             $('#locationFilter').change(function () {
                 displayedJobs = jobsToShow;
                 displayJobs();
@@ -730,6 +727,7 @@
             });
         });
     </script>
+
 
 
 
