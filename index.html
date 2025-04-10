@@ -2,31 +2,1098 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
-  <title>Gobi Test</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JENSEN education - Lediga tjänster</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/index-style.css">
+    <link rel="icon" type="image/png" sizes="32x32" href="./files/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./files/favicon-16x16.png">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://kit.fontawesome.com/ca38a06270.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://widget.gobistories.com/gwi/6" async onload="gobi.discover()"></script>
+
+
+    <meta property="og:title" content="JENSEN education karriärportal">
+    <meta property="og:description" content="Lediga jobb hos JENSEN education">
+    <meta property="og:image" content="https://headlessjobsites.github.io/jensen/files/HK.jpg">
+    <meta property="og:url" content="https://headlessjobsites.github.io/jensen/">
+    <meta name="twitter:card" content="JENSEN education karriärportal">
+    <meta name="twitter:title" content="JENSEN education karriärportal">
+    <meta name="twitter:description" content="Lediga jobb hos JENSEN education">
+    <meta name="twitter:image" content="https://headlessjobsites.github.io/jensen/files/HK.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:type" content="website">
+
 </head>
 
 <body>
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background-color: rgba(0, 0, 0, 0.0);">
+        <div class="container m-py-1">
+            <a class="navbar-brand" href="./" aria-label="Home">
+                <img src="./files/logo_jensen_vit.png" class="d-inline-block align-top" alt="JENSEN education logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="./#jobs-anchor">Jobb</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./#feature-section">Träffa de anställda</a>
+                    </li>
+                    <!-- <li class="nav-item">
+                        <a class="nav-link" href="./#meet-the-team">Träffa de anställda</a>
+                    </li> -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="./#process">Rekryteringsprocess</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" target="blank" href="https://www.jenseneducation.se/">jenseneducation.se<span class="sr-only">(current)</span></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-  <div class="gobi-wrapper">
-    <h2>Gobi Test Collection</h2>
-    <div class="gobi-collection" data-gobi-collection-id="j2jom"></div>
-  </div>
+    <script>
+        $(document).ready(function () {
+            $(window).scroll(function () {
+                if ($(window).scrollTop() > 56) {
+                    $(".navbar").addClass("bg-dark");
+                } else {
+                    $(".navbar").removeClass("bg-dark");
+                }
+            });
+            $(".navbar-toggler").click(function () {
+                if (!$(".navbar-collapse").hasClass("show")) {
+                    $(".navbar").addClass("bg-dark");
+                } else {
+                    if ($(window).scrollTop() < 56) {
+                        $(".navbar").removeClass("bg-dark");
+                    } else {
+                    }
+                }
+            });
+        });
+    </script>
 
-  <script>
-    // Загрузка скрипта вручную
-    window.addEventListener('DOMContentLoaded', function () {
-      const script = document.createElement('script');
-      script.src = 'https://widget.gobistories.com/gwi/6';
-      script.onload = () => {
-        if (window.gobi) gobi.discover();
-        else console.error('Gobi not loaded');
-      };
-      document.body.appendChild(script);
-    });
-  </script>
+    <section class="hero-section">
+        <video playsinline autoplay loop muted class="hero-video">
+            <source src="./files/Toppvideo_ren.mp4" type="video/mp4">
+        </video>
+        <div class="hero-content">
+            <h1><span>Ta nästa steg i din karriär - sök till oss!</span></h1>
+            <a href="#jobs-anchor" class="btn btn-primary btn-lg"><span class="btn-arrow"><strong>Se ledia tjänster</strong></span></a>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Fetch the jobs from the feed
+            fetch('https://api.talentech.io/reachmee/feed/jensen')
+                .then(response => response.json())
+                .then(jobs => {
+                    const positionsCount = jobs.length; // Get the count of jobs from the feed
+                    const btnText = positionsCount === 1 ? 'Se 1 ledig tjänst' : `Se ${positionsCount} lediga tjänster`; // Update button text based on count
+                    document.querySelector('a.btn.btn-primary.btn-lg strong').textContent = positionsCount > 0 ? btnText : 'Se lediga tjänster';
+                })
+                .catch(error => {
+                    console.error('Error fetching job details:', error);
+                    // If there is an error fetching the jobs, show default text
+                    document.querySelector('a.btn.btn-primary.btn-lg strong').textContent = 'Se lediga tjänster';
+                });
+        });
+    </script>
+
+    <!--
+<div class="gobi-stories-container" id="gobi-stories-container">
+  <button aria-label="Close video" class="close-btn" onclick="document.getElementById('gobi-stories-container').style.display='none';"><i class="fa-regular fa-xmark"></i></button>
+<script src="https://widget.gobistories.com/gwi/6" async onload="gobi.discover()"></script>
+
+<div class="gobi-collection" data-gobi-collection-id="pncc7"></div>
+  <a href="#company-section" aria-label="Get to know us"><div class="gobi-stories-text">Get to know us</div></a>
+</div>
+-->
+    <section class="company-section" id="company-section">
+        <div class="container section-container">
+            <div class="company-info company-container">
+                <h2 class="intro-header section-title">Är du vår <span class="title-alt"> nya kollega?</span></h2>
+                <p class="mb-4 m-px-2">Är du en person med höga ambitioner och ett stort engagemang för människors utbildning? Då kan JENSEN education vara rätt för dig!</p>
+                <p class="my-4 m-px-2">JENSEN education grundades 1996 av Håkan Jensen, företagets vd och långsiktiga ägare. Vi är ett av Sveriges största privata utbildningsföretag med studerande inom fem verksamhetsområden – förskola, grundskola, gymnasium, vuxenutbildning samt yrkeshögskola. Våra skolor finns från Uppsala till Malmö och vi har förtroendet att utbilda drygt 17 000 studerande och har ca 2 000 medarbetare.</p>
+                <p class="mt-4 mb-0 m-px-2">JENSEN kännetecknas av tydliga värderingar och en stark drivkraft för utveckling – både för våra medarbetare och studenter. Vi lägger stor vikt vid hälsa och erbjuder en trygg och stabil arbetsplats. Välkommen!</p>
+            </div>
+            <div class="video-container">
+                <video id="talentechVideo" class="rounded-video" playsinline autoplay loop muted>
+                    <source src="./files/TalenTech JENSEN.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <div class="video-controls">
+                    <button id="muteBtn"><img src="./files/volume-xmark-thin.svg" alt="Mute"></button>
+                </div>
+                <!-- <div class="front-image"><img src="./files/team.jpg"></div> -->
+            </div>
+        </div>
+
+    </section>
+
+    <section class="activities-section">
+        <div class="container section-container activities-container">
+            <h2 class="section-title">Våra<span class="title-alt"> verksamhets&shy;områden</span></h2>
+            <div class="activities-inner">
+                <div class="activities-card">
+                    <img class="activities-card-image" src="./files/FSK.jpg" alt="Förskola">
+                    <div class="activities-card-content">
+                        <h3 class="activities-card-title">Förskola</h3>
+                        <p class="activities-card-text">Bildningsresan börjar i förskolan. Vi har enbart förskolor med toppkvalitet där hela 97% av våra föräldrar rekommenderar oss.<i> Läs mer</i></p>
+                    </div>
+                    <a class="activities-card-link" href="https://www.jensenforskola.se/" target="_blank"></a>
+                </div>
+                <div class="activities-card">
+                    <img class="activities-card-image" src="./files/GR.jpg" alt="Grundskola">
+                    <div class="activities-card-content">
+                        <h3 class="activities-card-title">Grundskola</h3>
+                        <p class="activities-card-text">Den klassiska svenska skolan finns hos oss! Vi är bäst i Sverige på studiero och når höga resultat inom alla områden.<i> Läs mer</i></p>
+                    </div>
+                    <a class="activities-card-link" href="https://www.jensengrundskola.se/" target="_blank"></a>
+                </div>
+                <div class="activities-card">
+                    <img class="activities-card-image" src="./files/GY.jpg" alt="Gymnasium">
+                    <div class="activities-card-content">
+                        <h3 class="activities-card-title">Gymnasium</h3>
+                        <p class="activities-card-text">Bildning är målet! Vi lägger fokus på djupa ämneskunskaper, litteratur, läsning och skrivande på en hög nivå.<i> Läs mer</i></p>
+                    </div>
+                    <a class="activities-card-link" href="https://www.jensengymnasium.se/" target="_blank"></a>
+                </div>
+                <div class="activities-card">
+                    <img class="activities-card-image" src="./files/Komvux.jpg" alt="Komvux/SFI">
+                    <div class="activities-card-content">
+                        <h3 class="activities-card-title">Komvux/SFI</h3>
+                        <p class="activities-card-text">Vi är störst i Stockholm inom gymnasial vuxenutbildning. Vi utbildar även inom SFI.<i> Läs mer</i></p>
+                    </div>
+                    <a class="activities-card-link" href="https://www.jensenkomvux.se/" target="_blank"></a>
+                </div>
+                <div class="activities-card">
+                    <img class="activities-card-image" src="./files/YH_mini.jpg" alt="Yrkeshögskola">
+                    <div class="activities-card-content">
+                        <h3 class="activities-card-title">Yrkeshögskola</h3>
+                        <p class="activities-card-text">Kvalificerade yrkesutbildningar för framtidens specialister inom IT, teknik, fastighet och andra spännande yrkesområden.<i> Läs mer</i></p>
+                    </div>
+                    <a class="activities-card-link" href="https://www.jensenyh.se/" target="_blank"></a>
+                </div>
+                <div class="activities-card">
+                    <img class="activities-card-image" src="./files/HK.jpg" alt="JENSEN education/HK">
+                    <div class="activities-card-content">
+                        <h3 class="activities-card-title">JENSEN education / HK</h3>
+                        <p class="activities-card-text">På vårt huvudkontor i Gamla stan jobbar våra staber inom Ekonomi, Fastighet, Inköp, HR/Lön, Marknad, IT samt Kvalitet- och utveckling. Vi har även flera underbolag: JENSEN facility, interiors & promotion, kitchen, security och stables.<i> Läs mer</i></p>
+                    </div>
+                    <a class="activities-card-link" href="https://www.jenseneducation.se/" target="_blank"></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const video = document.getElementById('talentechVideo');
+            const muteBtn = document.getElementById('muteBtn');
+            const muteIcon = muteBtn.querySelector('img');
+
+            // Function to toggle video play/pause
+            const togglePlayPause = () => {
+                if (video.paused || video.ended) {
+                    video.play();
+                } else {
+                    video.pause();
+                }
+            };
+
+            // Setup Intersection Observer for autoplay/pause based on visibility
+            // This part will now work on all devices
+            const observer = new IntersectionObserver((entries) => {
+                const [entry] = entries;
+                if (entry.isIntersecting) {
+                    video.play();
+                } else {
+                    video.pause();
+                }
+            }, {
+                root: null,
+                threshold: 0.5
+            });
+
+            observer.observe(video);
+
+            // Check if we are on desktop before adding event listeners for play/pause and mute controls
+            if (window.innerWidth > 992) {
+                // Click event for the video itself
+                video.addEventListener('click', () => {
+                    togglePlayPause();
+                });
+
+                // Event listener for the mute button
+                muteBtn.addEventListener('click', () => {
+                    video.muted = !video.muted;
+                    muteIcon.src = video.muted ? "./files/volume-xmark-thin.svg" : "./files/volume-off-thin.svg";
+                    muteIcon.alt = video.muted ? "Mute" : "Unmute";
+                });
+            }
+        });
+    </script>
+
+    <!-- <section class="team-section" id="meet-the-team" style="background-color: #f0f0f0;">
+        <div class="container section-container team-container">
+            <h2 class="section-title">Träffa<span class="title-alt"> teamet</span></h2>
+            <div class="row mt-3">
+                
+                <script src="https://widget.gobistories.com/gwi/6" async onload="gobi.discover()"></script>
+
+                <div class="gobi-collection" data-gobi-collection-id="tavnb"></div>
+            </div>
+        </div>
+    </section> -->
+
+    <section class="feature-section" id="feature-section">
+        <div class="container section-container feature-container">
+            <h2 class="section-title">Våra <span class="title-alt"> medarbetare</span></h2>
+            <div class="row align-items-center flex-lg-row feature-item mb-5 pb-5"> <!-- Changes for mobile first -->
+                <div class="col-lg-6">
+                    <img src="./files/CarolineJohansson.jpg" alt="Caroline Johansson" class="img-fluid rounded-img" loading="lazy" />
+                </div>
+                <div class="col-lg-6 text-padding"> <!-- text-padding class for more padding -->
+                    <h3 class="feature-item-title">Caroline Johansson</h3>
+                    <p><strong>Förskollärare, JENSEN förskola Hyllie Gård</strong></p>
+                    <p>"Att arbeta på JENSEN förskola är arbetsglädje för mig. Att jag som förskollärare ständigt kan utmanas och utvecklas tillsammans med barnen genom vår dagliga undervisning är någonting som driver mig framåt varje dag. Här finns höga ambitioner och en hög nivå på vår undervisning – varför jag valde att arbeta på just JENSEN förskola. Vi har en tydlig struktur med ordning och reda i hur vi arbetar där alla på arbetsplatsen är inkluderade, något som är en viktig del inom JENSEN – att arbeta som ett team."</p>
+                </div>
+            </div>
+            <div class="row align-items-center flex-lg-row feature-item mb-5 pb-5">
+                <div class="col-lg-6 text-padding order-2 order-lg-1">
+                    <h3 class="feature-item-title">Edward Williamsson</h3>
+                    <p><strong>Förstelärare, JENSEN grundskola Tungelsta</strong></p>
+                    <p>"Kulturen på vår skola kännetecknas av prestigelöshet och höga ambitioner. Det jag uppskattar mest med att arbeta på JENSEN är att det är en organisation som verkligen uppmärksammar och värdesätter kompetens. Här finns en gemenskap där vi hjälper varandra att utvecklas, delar erfarenheter och arbetar nära tillsammans för att skapa den bästa möjliga undervisningen. Det är en miljö där professionalism och engagemang går hand i hand, där vi tar vårt uppdrag på största allvar men samtidigt har högt i tak och en stark "vi-känsla".</p>
+                </div>
+                <div class="col-lg-6 order-1 order-lg-2">
+                    <img src="./files/EdwardWilliamsson.jpg" alt="Edward Williamsson" class="img-fluid rounded-img" loading="lazy" />
+                </div>
+            </div>
+
+            <div class="row align-items-center flex-lg-row feature-item pb-4"> <!-- Changes for mobile first -->
+                <div class="col-lg-6">
+                    <img src="./files/CatrinLundberg.jpg" alt="Catrin Lundberg" class="img-fluid rounded-img" loading="lazy" />
+                </div>
+                <div class="col-lg-6 text-padding"> <!-- text-padding class for more padding -->
+                    <h3 class="feature-item-title">Catrin Lundberg</h3>
+                    <p><strong>Rektor på JENSEN gymnasium Eskilstuna</strong></p>
+                    <p>"För mig som rektor är det viktigt att skapa en trygg och inspirerande arbetsmiljö för både lärare och elever. Jag vill att mina medarbetare ska känna sig uppskattade, motiverade och ha tydliga förväntningar på sig, samtidigt som de får det stöd de behöver för att utvecklas. Jag tycker att vi har en inspirerande arbetsmiljö som präglas av god kvalitet och en väldigt fin kultur med prestigelöshet. Vi har en bra organisation och tydlighet i vårt arbete och det finns kompetenta stödfunktioner inom JENSEN gymnasium, som jag uppskattar mycket. Det är alltid roligt att gå till jobbet och jag trivs väldigt bra på JENSEN!"</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="quote-section">
+        <div class="container quote-container section-container">
+            <div class="quote-inner">
+                <div class="quote-card">
+                    <!-- <img class="quote-icon" src="./files/quote-Trivsel.png" alt="Quote Image"> -->
+                    <div class="icon-wrapper">
+                        <i class="quote-icon fa-thin fa-face-smile-hearts" style="color: #ffffff;"></i>
+                    </div>
+                    <h3 class="quote-title">Trivsel med kollegor</h3>
+                    <p class="quote-text">4,5/5 av våra medarbetare uppger att de trivs med sina kollegor</p>
+                </div>
+                <div class="quote-card">
+                    <!-- <img class="quote-icon" src="./files/quote-Rekommendation.png" alt="Quote Image"> -->
+                    <div class="icon-wrapper">
+                        <i class="quote-icon fa-thin fa-thumbs-up" style="color: #ffffff;"></i>
+                    </div>
+                    <h3 class="quote-title">Rekommendation</h3>
+                    <p class="quote-text">92% av alla medarbetare på JENSEN rekommenderar sin arbetsplats</p>
+                </div>
+                <div class="quote-card">
+                    <!-- <img class="quote-icon" src="./files/quote-Medarbetarnöjdhet.png" alt="Quote Image"> -->
+                    <div class="icon-wrapper">
+                        <i class="quote-icon fa-thin fa-badge-check" style="color: #ffffff;"></i>
+                    </div>
+                    <h3 class="quote-title">Medarbetarnöjdhet</h3>
+                    <p class="quote-text">4,4/5 av våra medarbetare uppger att de är nöjda med sin arbetsplats</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="process" class="process-section">
+        <div class="container process-container section-container">
+            <h2 class="section-title process-section-title"><span class="title-alt">Rekryterings&shy;process</span></h2>
+            <div class="row">
+
+                <div class="col-md-4 col-sm-4 process-item process-item-video hide-on-pc">
+                    <div class="process-content no-background gobi-video-item">
+                        <script src="https://widget.gobistories.com/gwi/6" async onload="gobi.discover()"></script>
+
+                        <div class="gobi-collection" data-gobi-collection-id="4uapw"></div>
+                    </div>
+                </div>
+
+                <!-- Existing Content in Right Column -->
+                <div class="col-md-12">
+                    <div class="row process-row">
+                        <div class="col-md-4 col-sm-4 process-item process-item-video hide-on-mobile">
+                            <div class="process-content no-background">
+                                <script src="https://widget.gobistories.com/gwi/6" async onload="gobi.discover()"></script>
+
+                                <div class="gobi-collection" data-gobi-collection-id="4uapw"></div>
+                            </div>
+                        </div>
+                        <!-- Benefit 1 -->
+                        <div class="col-md-4 col-sm-4 process-item">
+                            <div class="process-icon">
+                                <h3>1</h3>
+                            </div>
+                            <div class="process-content" style="height: 80%;">
+                                <h3>Skicka in din ansökan</h3>
+                                <p>Är du redo att ta nästa steg i din karriär? Du skickar enkelt in din ansökan via vår karriärsida. Ladda upp ditt CV och andra eventuellt relevanta dokument. Vi ser fram emot att läsa din ansökan!</p>
+                            </div>
+                        </div>
+                        <!-- Benefit 2 -->
+                        <div class="col-md-4 col-sm-4 process-item">
+                            <div class="process-icon">
+                                <h3>2</h3>
+                            </div>
+                            <div class="process-content" style="height: 80%;">
+                                <h3>Urval och tester</h3>
+                                <p>Vi går igenom ansökningar löpande, så skicka in din ansökan så snart som möjligt! För att säkerställa en rättvis och träffsäker rekryteringsprocess använder vi oss av psykometriska tester. Du får direkt feedback på dina resultat digitalt efter att du har slutfört testet.</p>
+                            </div>
+                        </div>
+                        <!-- Benefit 3 -->
+                        <div class="col-md-4 col-sm-4 process-item">
+                            <div class="process-icon">
+                                <h3>3</h3>
+                            </div>
+                            <div class="process-content">
+                                <h3>Intervjuprocess</h3>
+                                <p>Om din profil matchar våra behov bjuder vi in dig till en intervju. Vi tillämpar
+                                    kompetensbaserade intervjuer, vilket innebär att vi fokuserar på dina tidigare erfarenheter
+                                    och hur de matchar kraven för tjänsten.</p>
+                            </div>
+                        </div>
+                        <!-- Benefit 4 -->
+                        <div class="col-md-4 col-sm-4 process-item">
+                            <div class="process-icon">
+                                <h3>4</h3>
+                            </div>
+                            <div class="process-content">
+                                <h3>Referenstagning och bakgrundskontroll</h3>
+                                <p>Innan vi kan erbjuda dig en anställning genomför vi en standardiserad bakgrundskontroll. Det innebär att vi tar referenser från dina tidigare arbetsgivare och du får lämna utdrag från belastningsregistret.</p>
+                            </div>
+                        </div>
+                        <!-- Benefit 5 -->
+                        <div class="col-md-4 col-sm-4 process-item">
+                            <div class="process-icon">
+                                <h3>5</h3>
+                            </div>
+                            <div class="process-content">
+                                <h3>Erbjudande</h3>
+                                <p>Om vi har en ömsesidig matchning så är det nu dags att skriva på anställningsavtalet. Vi erbjuder dig möjligheten att få en betydelsefull roll i ett av Sveriges ledande utbildningsföretag.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="process-bottom">
+                <h3 class="process-bottom-title">Personuppgifter</h3>
+                <p class="process-bottom-text">Vi behandlar alla ansökningar konfidentiellt. Individens personliga integritet och säkerheten för dennes personuppgifter är viktig för oss på JENSEN education. JENSEN ansvarar för att se till att alla personuppgifter behandlas på ett korrekt sätt. Uppgifter som lämnats in i samband med din ansökan raderas automatiskt efter 26 månader.</p>
+            </div>
+        </div>
+    </section>
+
+    <!--	
+        <h2 class="container pt-5 mt-5 m-my-0 m-px-4 m-pb-0">Job <span class="title-alt">categories</span></h2>
+	<div id="teamCarousel" class="carousel slide" data-interval="false">
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <div class="container">
+                <div class="row ">
+                    <div class="col-md-4 team-member">
+<div class="team-background-image mb-3" alt="" style="background-image: url('/files/HR-image.jpg')"></div>
+                        <p class="role mb-3">Software Development</p>
+                        <p>Join our Software Development team to innovate and build cutting-edge technology solutions that revolutionize talent management.</p>
+                    </div>
+                    <div class="col-md-4 team-member">
+<div class="team-background-image mb-3" alt="" style="background-image: url('/files/cat-2.jpg')"></div>
+                        <p class="role mb-3">Customer Success</p>
+                        <p>Be a part of our Customer Success team, where your efforts directly contribute to our clients' growth and satisfaction.</p>
+                    </div>
+                    <div class="col-md-4 team-member">
+<div class="team-background-image mb-3" alt="" style="background-image: url('/files/Data-1.jpg')"></div>
+                        <p class="role mb-3">Sales and Marketing</p>
+                        <p>Drive growth and build meaningful relationships in our Sales and Marketing team, connecting clients with the solutions they need.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <div class="container">
+                <div class="row ">
+                    <div class="col-md-4 team-member">
+<div class="team-background-image mb-3" alt="" style="background-image: url('/files/cat-4.jpg')"></div>
+                        <p class="role mb-3">Product Management</p>
+                        <p>Shape the future of our offerings as a member of the Product Management team, where you can transform the talent  landscape.</p>
+                    </div>
+                    <div class="col-md-4 team-member">
+<div class="team-background-image mb-3" alt="" style="background-image: url('/files/cat-1.jpg')"></div>
+                        <p class="role mb-3">Human Resources</p>
+                        <p>Empower and enrich our company culture as part of the Human Resources team, focusing on talent development and organizational growth.</p>
+                    </div>
+                    <div class="col-md-4 team-member">
+<div class="team-background-image mb-3" alt="" style="background-image: url('/files/cat-3.jpg')"></div>
+                        <p class="role mb-3">Data Analysis & Insights</p>
+                        <p>Join our Data Analysis & Insights team to harness the power of data, driving strategic decisions and enhancing our product offerings.</p>
+                    </div>
+                    <div class="col-md-4 team-member"> 
+                    </div>
+                    <div class="col-md-4 team-member"> 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a class="carousel-control-prev" href="#teamCarousel" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#teamCarousel" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
+</div>
+-->
+
+    <section class="benefits-section">
+        <div class="container benefits-container section-container">
+            <h2 class="section-title benefits-title">Vår <span class="title-alt">företagskultur</span></h2>
+
+            <div class="benefits-inner">
+                <div class="company-info company-container">
+                    <p class="mb-3 m-px-2"><strong>Om JENSEN</strong></p>
+                    <p class="mb-0 m-px-2">JENSEN är en plats för dig med höga ambitioner som trivs att jobba med likasinnade. Vi
+                        värderar teamkänslan högt och arbetar efter devisen "alla elever är mina elever". Med
+                        framåtanda och stort engagemang är vårt mål att leda utvecklingen i skolvärlden.</p>
+                </div>
+                <!-- <div class="benefits-about">
+                    <h3 class="benefits-about-title">Om JENSEN</h3>
+                    <p class="benefits-about-text">JENSEN är en plats för dig med höga ambitioner som trivs att jobba med likasinnade. Vi värderar teamkänslan högt och arbetar efter devisen "alla elever är mina elever". Med framåtanda och stort engagemang är vårt mål att leda utvecklingen i skolvärlden.</p>
+                </div> -->
+                <div class="row">
+                    <!-- Benefit 0 -->
+                    <!-- <div class="col-md-4 col-sm-6 benefit-item">
+                        <div class="benefit-icon">
+                            <i class="fa-solid fa-display-code"></i>
+                        </div>
+                        <div class="benefit-content">
+                            <strong>Om JENSEN</strong>
+                            <p>NJENSEN är en plats för dig med höga ambitioner som trivs att jobba med likasinnade. Vi värderar teamkänslan högt och arbetar efter devisen "alla elever är mina elever". Med framåtanda och stort engagemang är vårt mål att leda utvecklingen i skolvärlden.</p>
+                        </div>
+                    </div> -->
+                    <!-- Benefit 1 -->
+                    <div class="col-md-3 col-sm-4 benefit-item">
+                        <div class="benefit-icon">
+                            <img src="./files/icon_ledarscap.png" alt="Benefit Icon">
+                        </div>
+                        <div class="benefit-content">
+                            <strong>Ledarskap</strong>
+                            <p>Något vi brinner extra mycket för är studiero och uppförande samt en hög språklig nivå hos våra elever.
+                            <p class="more-text">Du som lärare ska också få vara ledaren i klassrummet. Det kompromissar vi aldrig med och våra erfarna skolledare backar alltid upp dig för att vi ska ha studier i fokus och en lugn och trivsam arbetsmiljö både för elever och för dig som lärare.</p>
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Benefit 2 -->
+                    <div class="col-md-3 col-sm-4 benefit-item">
+                        <div class="benefit-icon">
+                            <img src="./files/icon_dresscode.png" alt="Benefit Icon">
+                        </div>
+                        <div class="benefit-content">
+                            <strong>Dresscode</strong>
+                            <p>Det finns många saker som gör oss unika, men det som syns mest är kanske vår formella dresscode.
+                            <p class="more-text">
+                                Hos oss är läraren ledaren i klassrummet och en dresscode stödjer auktoriteten. Vi är stolta yrkesproffs, oavsett vad man jobbar med på JENSEN bär man dresscode.</p>
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Benefit 3 -->
+                    <div class="col-md-3 col-sm-4 benefit-item">
+                        <div class="benefit-icon">
+                            <img src="./files/icon_hälsoprofil.png" alt="Benefit Icon">
+                        </div>
+                        <div class="benefit-content">
+                            <strong>Hälsoprofil</strong>
+                            <p>Vi vill vara en sund arbetsplats och bra förebilder för våra elever.
+                            <p class="more-text">Vi genomför därför olika hälsoinriktade aktiviteter. Alla medarbetare får friskvårdsbidrag och vi sponsrar deltagande i olika tävlingar. Vi jobbar också aktivt med mental träning för våra elever.</p>
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Benefit 4 -->
+                    <div class="col-md-3 col-sm-4 benefit-item">
+                        <div class="benefit-icon">
+                            <i class="fa-thin fa-graduation-cap"></i>
+                        </div>
+                        <div class="benefit-content">
+                            <strong>JENSEN academy</strong>
+                            <p>För våra extra ambitiösa medarbetare erbjuder vi vidareutbildningar via JENSEN Academy.</p>
+                        </div>
+                    </div>
+                    <!-- Benefit 5 -->
+                    <div class="col-md-3 col-sm-4 benefit-item">
+                        <div class="benefit-icon">
+                            <img src="./files/icon_medarbetare.png" alt="Benefit Icon">
+                        </div>
+                        <div class="benefit-content">
+                            <strong>Är JENSEN arbetsplatsen för dig?</strong>
+                            <p class="intro-text">Om du har ett stort engagemang kommer du att stortrivas på JENSEN
+                            <p class="more-text"> här får du jobba med likasinnade! Vi tror och satsar på våra medarbetare och har en mycket hög trivsel och nöjdhet.</p>
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Benefit 6 -->
+                    <!-- <div class="col-md-3 col-sm-4 benefit-item">
+                    <div class="benefit-icon">
+                        <i class="fa-solid fa-house-building"></i>
+                    </div>
+                    <div class="benefit-content">
+                        <strong>Hybridarbete</strong>
+                        <p>Arbeta både från våra fina kontor samt distans</p>
+                    </div>
+                </div> -->
+                    <!-- Benefit 7 -->
+                    <!-- <div class="col-md-3 col-sm-6 benefit-item">
+                    <div class="benefit-icon">
+                        <i class="fa-solid fa-dog"></i>
+                    </div>
+                    <div class="benefit-content">
+                        <strong>Hundvänlig</strong>
+                        <p>Hundar är välkomna till kontoret</p>
+                    </div>
+                </div> -->
+                </div>
+                <!-- <div class="benefits-bottom">
+                    <h3 class="benefits-bottom-title">Är JENSEN arbetsplatsen för dig?</h3>
+                    <p class="benefits-bottom-text">Om du har ett stort engagemang kommer du att stortrivas på JENSEN, här får du jobba med likasinnade! Vi tror och satsar på våra medarbetare och har en mycket hög trivsel och nöjdhet.</p>
+                </div> -->
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const benefitItems = document.querySelectorAll('.benefit-item');
+        const collapsedHeight = 240;
+
+        benefitItems.forEach(item => {
+            const content = item.querySelector('.benefit-content');
+            const moreText = item.querySelector('.more-text');
+            const introText = item.querySelector('.intro-text');
+
+            item.addEventListener('click', () => {
+                const isOpen = item.classList.contains('open');
+
+                // closing cards
+                benefitItems.forEach(i => {
+                    i.classList.remove('open');
+                    const c = i.querySelector('.benefit-content');
+                    const t = i.querySelector('.more-text');
+                    const intro = i.querySelector('.intro-text');
+
+                    if (c) {
+                        // current height before collapsing
+                        c.style.height = c.scrollHeight + 'px';
+
+                        requestAnimationFrame(() => {
+                            c.style.height = collapsedHeight + 'px';
+                        });
+                    }
+
+                    if (t) t.classList.remove('visible');
+                    if (intro) intro.innerText = intro.innerText.replace(/,$/, '');
+                });
+
+                // if card clicked again - close
+                if (isOpen) return;
+
+                // open current card
+                item.classList.add('open');
+
+                // set initial height
+                content.style.height = collapsedHeight + 'px';
+
+                requestAnimationFrame(() => {
+                    const fullHeight = content.scrollHeight;
+                    content.style.height = fullHeight + 'px';
+
+                    if (moreText) moreText.classList.add('visible');
+                    if (introText && !introText.innerText.endsWith(',')) {
+                        introText.innerText = introText.innerText.trim() + ',';
+                    }
+                });
+            });
+        });
+
+
+    </script>
+
+
+
+    <section class="map">
+        <div class="mt-5">
+            <div id="mapid" style="height: 500px; overflow: hidden;"></div>
+        </div>
+    </section>
+
+    <section class="jobs-section" id="jobs-anchor" style="background-color: #f0f0f0;">
+        <div class="container jobs-container section-container">
+            <h2 class=" section-title jobs-title">Lediga <span class="title-alt"> tjänster</span></h2>
+            <div class="row my-3 filters-container" id="filtersContainer">
+                <div class="col-md-3 mb-3">
+                    <label for="locationFilter">Plats</label>
+                    <select id="locationFilter" class="form-control">
+                        <option value="All">Alla platser</option>
+                        <!-- Location options will be dynamically added here -->
+                    </select>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="jobTypeFilter">Verksamhetsområden</label>
+                    <select id="jobTypeFilter" class="form-control">
+                        <option value="All">Alla verksamhetsområden</option>
+                        <!-- Job type options will be dynamically added here -->
+                    </select>
+                </div>
+            </div>
+            <div id="jobList" class="row"></div>
+            <div class="text-center mt-2">
+                <button id="loadMore" class="btn btn-primary">Hämta flera</button>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- DISABLED DUE TO POSITION UNPUBLISHED
+<div class="feature-section mb-5 pb-5" id="jobs-anchor" style="background-color: #f0f0f0;">
+<div class="container mb-5 m-mb-0">
+    <h3 class="mb-5 m-px-2 m-mb-4">Join our <span style="font-weight: 800">talent pool</span></h3>
+
+    <div id="" class="row">
+
+<div class="col-12 col-md-4 col-lg-4 mb-4">
+    <a href="/job-details.html?open-application" class="" style="text-decoration: none; color: inherit;" aria-label="Open application">
+        <div class="card h-100">
+            <div class="card-body">
+		        <div class="card-category"><span>General</span></div>
+                <div class="card-title">Unsolicited application</div>
+                <p class="card-text">Hæhre</p>
+			    <a href="/job-details.html?open-application" class="stretched-link">
+                <img src="./files/arrow-right-thin.svg" class="stretched-link" alt="Details" style="">
+		</a>
+            </div>
+        </div>
+    </a>
+</div>
+	    
+    </div>
+</div>
+</div>
+ -->
+    <section class="action-section">
+        <div class="container action-container section-container" style="text-align: center;">
+            <div class="action-top">
+                <h2 class="section-title">Hittade du inte tjänsten för dig?</h2>
+                <div class="">
+                    <p>Prenumerera på tjänster så får du ett mail när det finns en ledig tjänst som matchar dina preferenser.</p>
+                </div>
+            </div>
+            <button id="agent" class="mt-3 btn btn-primary" style="font-weight:800">Register dig</button>
+            <div class="modal fade modal-fullscreen-90w" id="exampleModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" id="closeModalButton" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <iframe id="modalIframe" src="" style="border: none; width: 100%; height: 800px; overflow: auto;"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    document.getElementById('agent').addEventListener('click', function () {
+                        var iframeUrl = "https://web103.reachmee.com/ext/I003/393/subscribe?site=5&lang=SE&validator=9e626e86cdd965bdf74dd0e8e585b5cc";
+                        document.getElementById('modalIframe').src = iframeUrl;
+                        $('#exampleModal').modal('show');
+                    });
+                });
+            </script>
+
+        </div>
+    </section>
+
+    <footer class="text-center bg-dark text-light">
+        <div class="container section-container footer-container">
+            <img src="./files/logo_jensen_vit.png" alt="JENSEN education Logo" class="mb-3" style="max-width: 180px;">
+            <div class="mt-3 mb-4" style="max-width: 600px; margin: auto;">
+                <p style="font-size: 1.25rem;">JENSEN education grundades 1996 av Håkan Jensen, företagets vd och långsiktiga ägare. JENSEN är ett av Sveriges största privata utbildningsföretag med verksamhet i de flesta större städer runtom i Sverige. Vårt utbildningskoncept ”Träning för verkligheten och bildning som mål” genomsyrar all verksamhet.</p>
+            </div>
+            <div class="">
+                <a href="https://www.facebook.com/jensengymnasieskolor/"><img src="./files/TT-f.svg" alt="Icon 1" class="mx-2" style="width: 30px; height: 30px;"></a>
+                <a href="https://www.linkedin.com/company/jensen-education"><img src="./files/TT-l.svg" alt="Icon 2" class="mx-2" style="width: 30px; height: 30px;"></a>
+                <a href="mailto:hr@jenseneducation.se"><img src="./files/TT-e.svg" alt="Icon 4" class="mx-2" style="width: 30px; height: 30px;"></a>
+            </div>
+        </div>
+    </footer>
+
+
+    <div class="container my-0 py-1 m-py-2">
+        <div class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center"><!-- updated flex classes -->
+            <!-- "Powered by" section -->
+            <div>
+                <span class="mr-1">Powered by</span>
+                <a style="text-decoration:none; color: inherit;" href="https://talentech.com"><img src="./files/TT-fav.svg" alt="Talentech Logo" style="width: 20px; vertical-align: middle; position: relative; bottom: 1px;"></a>
+                <a style="text-decoration:none; color: inherit;" href="https://talentech.com"><span class="ml-1" style="">Talentech</span></a>
+            </div>
+
+            <!-- Share section -->
+            <div class="share-container mt-2 mt-sm-0 ml-sm-auto"><!-- updated margin and alignment classes -->
+                <span class="d-block d-sm-inline mb-1"><!-- updated responsive classes -->
+                    Share on social media:
+                    <a href="#" id="facebook-share-link" target="_blank" rel="noopener noreferrer">
+                        <img src="https://cdn.jsdelivr.net/npm/simple-icons/icons/facebook.svg" alt="Share on Facebook" width="16" height="16">
+                    </a>
+                    <a href="#" id="twitter-share-link" target="_blank" rel="noopener noreferrer">
+                        <img src="https://cdn.jsdelivr.net/npm/simple-icons/icons/x.svg" alt="Share on X" width="16" height="16">
+                    </a>
+                    <a href="#" id="linkedin-share-link" target="_blank" rel="noopener noreferrer">
+                        <img src="https://cdn.jsdelivr.net/npm/simple-icons/icons/linkedin.svg" alt="Share on LinkedIn" width="16" height="16">
+                    </a>
+                </span>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // Function to dynamically set the URLs for social media sharing
+        function setSocialMediaShareUrls() {
+            var facebookShareLink = document.getElementById('facebook-share-link');
+            var twitterShareLink = document.getElementById('twitter-share-link');
+            var linkedinShareLink = document.getElementById('linkedin-share-link');
+            var currentUrl = encodeURIComponent(window.location.href);
+
+            facebookShareLink.href = 'https://www.facebook.com/sharer/sharer.php?u=' + currentUrl;
+            twitterShareLink.href = 'https://twitter.com/intent/tweet?url=' + currentUrl;
+            linkedinShareLink.href = 'https://www.linkedin.com/shareArticle?url=' + currentUrl;
+        }
+
+        // Call the function to set social media share URLs
+        setSocialMediaShareUrls();
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            let jobs = [];
+            let displayedJobs = 0;
+            const jobsToShowDesktop = 12;
+            const jobsToShowMobile = 6;
+            let jobsToShow = window.innerWidth > 768 ? jobsToShowDesktop : jobsToShowMobile;
+
+            $(window).resize(function () {
+                const previousJobsToShow = jobsToShow;
+                jobsToShow = window.innerWidth > 768 ? jobsToShowDesktop : jobsToShowMobile;
+
+                if (displayedJobs <= previousJobsToShow) {
+                    displayedJobs = jobsToShow;
+                }
+
+                displayJobs();
+                updateLoadMoreVisibility(getFilteredJobs().length);
+            });
+
+            // 👇 Функция фильтрации
+            function getFilteredJobs() {
+                const selectedCountry = $('#locationFilter').val();
+                const selectedJobType = $('#jobTypeFilter').val();
+
+                return jobs.filter(job => {
+                    const orgName = getOrganizationUnitName(job);
+                    return (selectedCountry === 'All' || job.country === selectedCountry) &&
+                        (selectedJobType === 'All' || orgName === selectedJobType);
+                });
+            }
+
+            // Название орг. юнита
+            function getOrganizationUnitName(job) {
+                return job.organizations?.length > 1
+                    ? job.organizations[1]?.nameorgunit
+                    : job.organizations?.[0]?.nameorgunit || 'Not specified';
+            }
+
+            function populateFilters() {
+                const locationSet = new Set();
+                const jobTypeSet = new Set();
+
+                jobs.forEach(job => {
+                    if (job.country) locationSet.add(job.country);
+                    const orgName = getOrganizationUnitName(job);
+                    if (orgName && orgName !== 'Not specified') jobTypeSet.add(orgName.trim());
+                });
+
+                $('#locationFilter').html('<option value="All">Alla platser</option>');
+                locationSet.forEach(country => {
+                    $('#locationFilter').append(`<option value="${country}">${country}</option>`);
+                });
+
+                $('#jobTypeFilter').html('<option value="All">Alla verksamhetsområden</option>');
+                jobTypeSet.forEach(type => {
+                    $('#jobTypeFilter').append(`<option value="${type}">${type}</option>`);
+                });
+            }
+
+            function displayJobs() {
+                $('#jobList').empty();
+
+                if (jobs.length === 0) {
+                    $('#jobList').append('<p class="no-jobs-message mx-3 m-mx-0">Det finns för närvarande inga lediga jobb publicerade.</p>');
+                    $('#filtersContainer').hide();
+                    $('#loadMore').hide();
+                    return;
+                } else {
+                    $('#filtersContainer').show();
+                }
+
+                const filteredJobs = getFilteredJobs();
+
+                if (filteredJobs.length === 0) {
+                    $('#jobList').append('<p class="no-jobs-message">Inga jobb matchar dina filter.</p>');
+                    $('#loadMore').hide();
+                    return;
+                }
+
+                const jobsToRender = filteredJobs.slice(0, displayedJobs);
+
+                jobsToRender.forEach(job => {
+                    $('#jobList').append(buildJobCard(job));
+                });
+
+                updateLoadMoreVisibility(filteredJobs.length);
+            }
+
+            function buildJobCard(job) {
+                const jobDetailUrl = `job-details.html?jobId=${job.ad_id}`;
+                const organizationUnitName = job.organizations.length > 1
+                    ? job.organizations[1].nameorgunit
+                    : job.organizations[0]?.nameorgunit || 'Not specified';
+
+                return `
+          <div class="col-12 col-md-4 col-lg-4 mb-4">
+            <a href="${jobDetailUrl}" class="" style="text-decoration: none; color: inherit;" aria-label="Job details">
+              <div class="card h-100">
+                <div class="card-body">
+                  <div class="card-category"><span>${organizationUnitName}</span></div>
+                  <div class="card-title">${job.title}</div>
+                  <p class="card-text">${job.country}</p>
+                  <a href="${jobDetailUrl}" class="stretched-link">
+                    <img src="./files/arrow-right-thin.svg" class="stretched-link" alt="Details">
+                  </a>
+                </div>
+              </div>
+            </a>
+          </div>`;
+            }
+
+            function updateLoadMoreVisibility(filteredCount) {
+                if (displayedJobs >= filteredCount) {
+                    $('#loadMore').hide();
+                } else {
+                    $('#loadMore').show();
+                }
+            }
+
+            function fetchJobs() {
+                fetch('https://api.talentech.io/reachmee/feed/jensen')
+                    .then(response => response.json())
+                    .then(data => {
+                        jobs = data;
+                        displayedJobs = Math.min(jobsToShow, jobs.length);
+                        populateFilters();
+                        displayJobs();
+                    })
+                    .catch(error => {
+                        console.error('Error fetching jobs:', error);
+                    });
+            }
+
+            fetchJobs();
+
+            $('#loadMore').click(function () {
+                displayedJobs += jobsToShow;
+                displayJobs();
+            });
+
+            $('#locationFilter, #jobTypeFilter').change(function () {
+                displayedJobs = jobsToShow;
+                displayJobs();
+            });
+
+            // 👇 Скролл-проверка (чтобы кнопка не появлялась зря)
+            $(window).on('scroll', function () {
+                const filteredJobs = getFilteredJobs();
+                updateLoadMoreVisibility(filteredJobs.length);
+            });
+        });
+    </script>
+
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        async function fetchFeed() {
+            const response = await fetch('https://api.talentech.io/reachmee/feed/jensen');
+            return await response.json();
+        }
+
+        async function geocodeArea(areaName) {
+            const response = await fetch(`https://nominatim.openstreetmap.org/search?q=${areaName}&format=json&limit=1`);
+            const data = await response.json();
+            return data.length > 0 ? { lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon) } : null;
+        }
+
+        async function initMap() {
+            const feed = await fetchFeed();
+            const markers = {};
+
+            const map = L.map('mapid', {
+                attributionControl: false,
+                scrollWheelZoom: false
+            }).setView([55.6050, 13.0038], 4);
+
+            L.tileLayer('https://api.mapbox.com/styles/v1/inequi/cm3rb3lgo005i01r2g1k9bdfh/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiaW5lcXVpIiwiYSI6ImNsdTQ0c2FybTFiZG4ya3FzZjQxOW91ejUifQ.Z_vyEld041G0LshX2Mdtpw', {
+                maxZoom: 8,
+                attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                tileSize: 512,
+                zoomOffset: -1,
+                accessToken: 'pk.eyJ1IjoiaW5lcXVpIiwiYSI6ImNsdTQ0c2FybTFiZG4ya3FzZjQxOW91ejUifQ.Z_vyEld041G0LshX2Mdtpw'
+            }).addTo(map);
+
+            var customIcon = L.icon({
+                iconUrl: './files/pin-gold.svg',
+                iconSize: [40, 40],
+                iconAnchor: [18, 39],
+                popupAnchor: [1, -15]
+            });
+
+            for (const item of feed) {
+                let coords = null;
+                let location = 'Norge';
+
+                // Reverse the areas array to try the most specific location first
+                const reversedAreas = item.areas.slice().reverse();
+                for (const area of reversedAreas) {
+                    coords = await geocodeArea(area.name);
+                    if (coords) {
+                        location = area.name;
+                        break;
+                    }
+                }
+
+                if (!coords) {
+                    coords = { lat: 61.99589575051149, lon: 9.423291957454996 };
+                }
+
+                const key = `${coords.lat},${coords.lon}`;
+
+                if (!markers[key]) {
+                    markers[key] = { marker: L.marker([coords.lat, coords.lon], { icon: customIcon }).addTo(map), jobs: [], jobIndex: 0 };
+                }
+
+                markers[key].jobs.push({
+                    title: item.title,
+                    location: location,
+                    url: `./job-details.html?jobId=${item.url.split('rmjob=')[1]}`
+                });
+            }
+
+            Object.values(markers).forEach(markerObj => {
+                markerObj.marker.on('click', () => {
+                    updatePopup(markerObj);
+                });
+            });
+
+            function updatePopup(markerObj) {
+                const job = markerObj.jobs[markerObj.jobIndex];
+                let popupContent = `
+                <div style="background-color: #fff; color: #000; padding: 30px 30px 30px 30px; border-radius: 0;">
+                    <a href="${job.url}" style="font-size: large; color: #000; text-decoration: none;">${job.title}</a>
+                    <div style="margin-top: 10px;">
+                        <span style="">Sted:</span> <span>${job.location}</span>
+                    </div>
+                    <div style="display: flex; justify-content: flex-start; margin-top: 20px;">
+                        <a href="${job.url}" style="background-color: #539333; color: #fff; padding: 10px 15px; text-decoration: none; font-weight: 600; ">Se jobb</a>
+                    </div>
+                    ${markerObj.jobs.length > 1 ? `
+                    <div style="display: flex; justify-content: space-between; margin-top: 15px;">
+                        <button onclick="changeJob(${markerObj.marker._leaflet_id}, -1, event)" style="background: none; border: none; cursor: pointer; color: #000;"><i class="fa fa-chevron-left"></i></button>
+                        <button onclick="changeJob(${markerObj.marker._leaflet_id}, 1, event)" style="background: none; border: none; cursor: pointer; color: #000;"><i class="fa fa-chevron-right"></i></button>
+                    </div>
+                    ` : ''}
+                </div>
+            `;
+                markerObj.marker.bindPopup(popupContent).openPopup();
+
+                markerObj.marker.getPopup().on('remove', () => {
+                    markerObj.marker.off().on('click', () => {
+                        updatePopup(markerObj);
+                    });
+                });
+            }
+
+            window.changeJob = function (markerId, direction, e) {
+                e.stopPropagation();
+                const markerObj = Object.values(markers).find(m => m.marker._leaflet_id === markerId);
+                markerObj.jobIndex += direction;
+                if (markerObj.jobIndex >= markerObj.jobs.length) {
+                    markerObj.jobIndex = 0;
+                } else if (markerObj.jobIndex < 0) {
+                    markerObj.jobIndex = markerObj.jobs.length - 1;
+                }
+                updatePopup(markerObj);
+                return false;
+            };
+        }
+
+        document.addEventListener('DOMContentLoaded', initMap);
+    </script>
+
+
+
+    <!-- FIXES DOUBLE TAP FOR 'LES MER' TESTIMONIAL BUTTON -->
+    <script>
+        $(document).ready(function () {
+            // Handling touchstart separately to avoid the mobile double-tap issue
+            $('.btn[data-target="#testimonialsModal"]').on('touchstart', function (e) {
+                e.preventDefault(); // Prevents the default click behavior on touch
+                $('#testimonialsModal').modal('show');
+            });
+        });
+    </script>
+
+
 
 </body>
 
