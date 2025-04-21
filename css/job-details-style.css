@@ -894,3 +894,10 @@ a.nav-link.new-link {
 h1#form-heading {
 	font-size: 25px !important;
 }
+
+#applicationFormIframe {
+  width: 100%;
+  border: none;
+  min-height: 1000px; /* Минимальная высота при загрузке */
+  transition: height 0.3s ease-in-out; /* Плавное изменение высоты */
+}
