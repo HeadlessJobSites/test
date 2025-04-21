@@ -449,16 +449,25 @@
         });
 
         // Consolidate message listener, adding security check
-        window.addEventListener('message', function (event) {
-            // Verify the origin of your iframe content
-            const expectedOrigin = 'https://web103.reachmee.com';
-            if (event.origin === expectedOrigin && typeof event.data === 'string' && event.data.startsWith('resize::')) {
-                const height = event.data.split('resize::')[1];
-                if (height) {
-                    document.getElementById('applicationFormIframe').style.height = height + 'px';
+        window.addEventListener('message', (function () {
+            let resizeTimeout;
+            return function (event) {
+                const expectedOrigin = 'https://web103.reachmee.com';
+
+                if (event.origin === expectedOrigin && typeof event.data === 'string' && event.data.startsWith('resize::')) {
+                    const height = event.data.split('resize::')[1];
+                    if (height) {
+                        clearTimeout(resizeTimeout);
+                        resizeTimeout = setTimeout(() => {
+                            const iframe = document.getElementById('applicationFormIframe');
+                            if (iframe) {
+                                iframe.style.height = height + 'px';
+                            }
+                        }, 200); // Задержка между ресайзами
+                    }
                 }
-            }
-        }, false);
+            };
+        })());
     </script>
 
     <section id="tt-feature-section" class="similar-jobs-section" id="jobs-anchor">
@@ -521,6 +530,7 @@
                     });
                 });
             </script>
+
         </div>
 
     </section>
